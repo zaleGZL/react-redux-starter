@@ -1,5 +1,3 @@
-import get from 'lodash/get';
-
 /** TODO: 优化
  * 获取服务端返回的错误信息
  * @param {Object} error 错误信息
@@ -9,14 +7,17 @@ export const getErrorMessage = (
   error = {},
   message = '未知错误，请稍后重试'
 ) => {
-  const result = get(error, 'response.data.message');
-
-  if (typeof result === 'string') {
-    return result;
-  } else {
-    console.log(get(error, 'response.data'));
-    return message;
+  if (
+    typeof error === 'object' &&
+    typeof error.response === 'object' &&
+    typeof error.response.data === 'object' &&
+    typeof error.response.data.message === 'string'
+  ) {
+    console.log(error.response.data);
+    return error.response.data.message;
   }
+
+  return message;
 };
 
 /**
